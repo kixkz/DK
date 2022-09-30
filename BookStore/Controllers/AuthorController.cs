@@ -1,4 +1,5 @@
-﻿using BookStore.DL.Repositories.InMemotyRepositories;
+﻿using BookStore.BL.Interfaces;
+using BookStore.DL.Repositories.InMemotyRepositories;
 using BookStore.Models.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,25 +9,25 @@ namespace BookStore.Controllers
     [Route("[controller]")]
     public class AuthorController : ControllerBase
     {
-        private readonly IAuthorRepository _authorRepository;
+        private readonly IAuthorService _authorRepository;
         private static readonly List<Author> _authors = new List<Author>();
 
 
-        private readonly ILogger<User> _logger;
+        private readonly ILogger<Person> _logger;
 
-        public AuthorController(ILogger<User> logger, IAuthorRepository authorRepository)
+        public AuthorController(ILogger<Person> logger, IAuthorService authorRepository)
         {
             _logger = logger;
             _authorRepository = authorRepository;
         }
 
-        [HttpGet(nameof(Get))]
+        [HttpGet("Get authors")]
         public IEnumerable<Author> Get()
         {
             return _authorRepository.GetAllAuthors();
         }
 
-        [HttpGet(nameof(GetById))]
+        [HttpGet("Get hnj")]
         public Author GetById(int id)
         {
             return _authorRepository.GetByID(id);

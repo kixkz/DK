@@ -1,4 +1,5 @@
-﻿using BookStore.Models.Models;
+﻿using BookStore.DL.Interfaces;
+using BookStore.Models.Models;
 
 namespace BookStore.DL.Repositories.InMemotyRepositories
 {
@@ -8,7 +9,7 @@ namespace BookStore.DL.Repositories.InMemotyRepositories
 
         public AuthorRepository()
         {
-
+            _authors = new List<Author>();
         }
 
         public Author AddAuthor(Author author)

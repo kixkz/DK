@@ -1,3 +1,4 @@
+using BookStore.BL.Interfaces;
 using BookStore.DL.Interfaces;
 using BookStore.Models.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -8,38 +9,38 @@ namespace BookStore.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IPersonRepository _userInMemoryRepository;
-        private static readonly List<User> _models = new List<User>();
+        private readonly IPersonService _userInMemoryRepository;
+        private static readonly List<Person> _models = new List<Person>();
 
 
-        private readonly ILogger<User> _logger;
+        private readonly ILogger<Person> _logger;
 
-        public UserController(ILogger<User> logger, IPersonRepository userInMemoryRepository)
+        public UserController(ILogger<Person> logger, IPersonService userInMemoryRepository)
         {
             _logger = logger;
             _userInMemoryRepository = userInMemoryRepository;
         }
 
         [HttpGet(nameof(Get))]
-        public IEnumerable<User> Get()
+        public IEnumerable<Person> Get()
         {
             return _userInMemoryRepository.GetAllUsers();
         }
 
         [HttpGet(nameof(GetById))]
-        public User GetById(int id)
+        public Person GetById(int id)
         {
             return _userInMemoryRepository.GetByID(id);
         }
 
         [HttpPost]
-        public void Add([FromBody] User model)
+        public void Add([FromBody] Person model)
         {
             _userInMemoryRepository.AddUser(model);
         }
 
         [HttpPut]
-        public void Update(User user)
+        public void Update(Person user)
         {
             _userInMemoryRepository.UpdateUser(user);
         }

@@ -1,8 +1,8 @@
 ﻿using BookStore.Models.Models;
 
-namespace BookStore.DL.Interfaces
+namespace BookStore.BL.Interfaces
 {
-    public interface IPersonRepository
+    public interface IPersonService
     {
         Person AddUser(Person user);
 
@@ -13,6 +13,5 @@ namespace BookStore.DL.Interfaces
         Person? GetByID(int id);
 
         Person UpdateUser(Person user);
-
     }
 }

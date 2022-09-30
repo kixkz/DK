@@ -1,6 +1,6 @@
 ﻿namespace BookStore.Models.Models
 {
-    public record User
+    public record Person
     {
         public int Id { get; set; }
 

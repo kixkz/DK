@@ -1,20 +1,20 @@
 ﻿using BookStore.DL.Interfaces;
 using BookStore.Models.Models;
 
-namespace BookStore.DL.Repositories
+namespace BookStore.DL.Repositories.InMemotyRepositories
 {
     public class UserInMemoryRepository : IPersonRepository
     {
-        private static List<User> _users = new List<User>()
+        private static List<Person> _users = new List<Person>()
         {
-            new User()
+            new Person()
             {
                 Id = 1,
                 Name = "Toshko",
                 Age = 35
             },
 
-            new User()
+            new Person()
             {
                 Id = 2,
                 Name = "Peshko",
@@ -26,20 +26,20 @@ namespace BookStore.DL.Repositories
 
         public UserInMemoryRepository()
         {
-            
+
         }
 
-        public IEnumerable<User> GetAllUsers()
+        public IEnumerable<Person> GetAllUsers()
         {
             return _users;
         }
 
-        public User? GetByID(int id)
+        public Person? GetByID(int id)
         {
             return _users.FirstOrDefault(x => x.Id == id);
         }
 
-        public User AddUser(User user)
+        public Person AddUser(Person user)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace BookStore.DL.Repositories
             return user;
         }
 
-        public User UpdateUser(User user)
+        public Person UpdateUser(Person user)
         {
             var existingUser = _users.FirstOrDefault(x => x.Id == user.Id);
             if (existingUser == null) return null;
@@ -65,7 +65,7 @@ namespace BookStore.DL.Repositories
             return user;
         }
 
-        public User? DeleteUser(int userId)
+        public Person? DeleteUser(int userId)
         {
             if (userId < 0) return null;
 
@@ -78,6 +78,6 @@ namespace BookStore.DL.Repositories
             return user;
         }
 
-        
+
     }
 }

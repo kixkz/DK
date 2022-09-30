@@ -1,6 +1,6 @@
 ﻿using BookStore.Models.Models;
 
-namespace BookStore.DL.Repositories.InMemotyRepositories
+namespace BookStore.DL.Interfaces
 {
     public interface IAuthorRepository
     {
