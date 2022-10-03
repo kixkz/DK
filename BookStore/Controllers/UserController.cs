@@ -11,9 +11,9 @@ namespace BookStore.Controllers
     {
         private readonly IPersonService _userInMemoryRepository;
 
-        private readonly ILogger<Person> _logger;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(ILogger<Person> logger, IPersonService userInMemoryRepository)
+        public UserController(ILogger<UserController> logger, IPersonService userInMemoryRepository)
         {
             _logger = logger;
             _userInMemoryRepository = userInMemoryRepository;
