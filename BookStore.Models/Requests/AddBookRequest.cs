@@ -1,12 +1,9 @@
-﻿namespace BookStore.Models.Models
+﻿namespace BookStore.Models.Requests
 {
-    public record Book
+    public class AddBookRequest
     {
-        public int Id { get; set; }
-
         public string Title { get; init; }
 
         public int AuthorId { get; init; }
-
     }
 }

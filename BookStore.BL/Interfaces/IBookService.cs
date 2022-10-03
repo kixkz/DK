@@ -1,10 +1,12 @@
 ﻿using BookStore.Models.Models;
+using BookStore.Models.Requests;
+using BookStore.Models.Responses;
 
 namespace BookStore.BL.Interfaces
 {
     public interface IBookService
     {
-        Book AddBook(Book book);
+        AddBookResponse AddBook(AddBookRequest book);
 
         Book? DeleteBook(int bookId);
 
@@ -12,6 +14,6 @@ namespace BookStore.BL.Interfaces
 
         Book? GetByID(int id);
 
-        Book UpdateBook(Book book);
+        AddBookResponse UpdateBook(AddBookRequest book, int id);
     }
 }

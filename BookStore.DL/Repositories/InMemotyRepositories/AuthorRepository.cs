@@ -18,7 +18,15 @@ namespace BookStore.DL.Repositories.InMemotyRepositories
         {
             try
             {
-                _authors.Add(author);
+                if (GetAuthorByName(author.Name) == null)
+                {
+                    _authors.Add(author);
+                }
+                else
+                {
+                    return null;
+                }
+                
             }
             catch (Exception e)
             {
@@ -61,6 +69,11 @@ namespace BookStore.DL.Repositories.InMemotyRepositories
             _authors.Add(author);
 
             return author;
+        }
+
+        public Author? GetAuthorByName(string authorName)
+        {
+            return _authors.FirstOrDefault(x => x.Name.Equals(authorName));
         }
     }
 }
