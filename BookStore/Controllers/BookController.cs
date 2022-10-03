@@ -13,9 +13,9 @@ namespace BookStore.Controllers
     {
         private readonly IBookService _bookService;
 
-        private readonly ILogger<Book> _logger;
+        private readonly ILogger<BookController> _logger;
 
-        public BookController(ILogger<Book> logger, IBookService bookRepository)
+        public BookController(ILogger<BookController> logger, IBookService bookRepository)
         {
             _logger = logger;
             _bookService = bookRepository;
