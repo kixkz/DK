@@ -13,9 +13,9 @@ namespace BookStore.Controllers
         private static readonly List<Book> _authors = new List<Book>();
 
 
-        private readonly ILogger<Person> _logger;
+        private readonly ILogger<Book> _logger;
 
-        public BookController(ILogger<Person> logger, IBookService bookRepository)
+        public BookController(ILogger<Book> logger, IBookService bookRepository)
         {
             _logger = logger;
             _bookRepository = bookRepository;
@@ -27,7 +27,7 @@ namespace BookStore.Controllers
             return _bookRepository.GetAllBooks();
         }
 
-        [HttpGet("Get")]
+        [HttpGet("GetById")]
         public Book GetById(int id)
         {
             return _bookRepository.GetByID(id);
