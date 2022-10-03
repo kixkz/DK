@@ -55,15 +55,6 @@ namespace BookStore.BL.Services
 
         public Author? GetByID(int id)
         {
-            //try
-            //{
-            //    throw new ArgumentNullException("Test");
-            //}
-            //catch (Exception ex)
-            //{
-            //    _logger.LogError(ex.Message);
-            //    return null;
-            //}
             return _authorRepository.GetByID(id);
         }
 

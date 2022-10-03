@@ -15,12 +15,6 @@ builder.Logging.AddSerilog(logger);
 builder.Services.RegisterRepositories()
     .RegisterServices()
     .AddAutoMapper(typeof(Program));
-//builder.Services.AddSingleton<IPersonRepository, UserInMemoryRepository>();
-//builder.Services.AddSingleton<IAuthorRepository, AuthorRepository>();
-//builder.Services.AddSingleton<IBookRepository, BookRepository>();
-//builder.Services.AddSingleton<IPersonService, PersonService>();
-//builder.Services.AddSingleton<IAuthorService, AuthorService>();
-//builder.Services.AddSingleton<IBookService, BookService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
