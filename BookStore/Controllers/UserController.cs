@@ -10,8 +10,6 @@ namespace BookStore.Controllers
     public class UserController : ControllerBase
     {
         private readonly IPersonService _userInMemoryRepository;
-        private static readonly List<Person> _models = new List<Person>();
-
 
         private readonly ILogger<Person> _logger;
 

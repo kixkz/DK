@@ -13,5 +13,7 @@ namespace BookStore.DL.Interfaces
         Author? GetByID(int id);
 
         Author UpdateAuthor(Author author);
+
+        Author? GetAuthorByName(string authorName);
     }
 }

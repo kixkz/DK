@@ -1,21 +1,46 @@
-﻿using BookStore.BL.Interfaces;
+﻿using System.Net;
+using AutoMapper;
+using BookStore.BL.Interfaces;
 using BookStore.DL.Interfaces;
 using BookStore.Models.Models;
+using BookStore.Models.Requests;
+using BookStore.Models.Responses;
+using Microsoft.Extensions.Logging;
 
 namespace BookStore.BL.Services
 {
     public class AuthorService : IAuthorService
     {
         private readonly IAuthorRepository _authorRepository;
+        private readonly IMapper _mapper;
+        private readonly ILogger<AuthorService> _logger;
 
-        public AuthorService(IAuthorRepository authorRepository)
+        public AuthorService(IAuthorRepository authorRepository, IMapper mapper, ILogger<AuthorService> logger)
         {
             _authorRepository = authorRepository;
+            _mapper = mapper;
+            _logger = logger;
         }
 
-        public Author AddAuthor(Author author)
+        public AddAuthorResponse AddAuthor(AddAuthorRequest authorRequest)
         {
-            return _authorRepository.AddAuthor(author);
+            var auth = _authorRepository.GetAuthorByName(authorRequest.Name);
+
+            if (auth != null)
+                return new AddAuthorResponse()
+                {
+                    HttpStatusCode = HttpStatusCode.BadRequest,
+                    Message = "Author already exist"
+                };
+
+            var author = _mapper.Map<Author>(authorRequest);
+            var result = _authorRepository.AddAuthor(author);
+
+            return new AddAuthorResponse()
+            {
+                HttpStatusCode = HttpStatusCode.OK,
+                Author = result
+            };
         }
 
         public Author? DeleteAuthor(int authorId)
@@ -33,9 +58,23 @@ namespace BookStore.BL.Services
             return _authorRepository.GetByID(id);
         }
 
-        public Author UpdateAuthor(Author author)
+        public AddAuthorResponse UpdateAuthor(AddAuthorRequest addAuthorRequest, int id)
         {
-            return _authorRepository.UpdateAuthor(author);
+            var auth = _authorRepository.GetAuthorByName(addAuthorRequest.Name);
+            if (auth == null)
+                return new AddAuthorResponse()
+                {
+                    HttpStatusCode = HttpStatusCode.BadRequest,
+                    Message = "Author not exist"
+                };
+            var author = _mapper.Map<Author>(addAuthorRequest);
+            author.Id = id;
+            var result = _authorRepository.UpdateAuthor(author);
+            return new AddAuthorResponse()
+            {
+                HttpStatusCode = HttpStatusCode.OK,
+                Author = result
+            };
         }
     }
 }

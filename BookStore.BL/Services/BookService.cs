@@ -1,21 +1,34 @@
-﻿using BookStore.BL.Interfaces;
+﻿using System.Net;
+using AutoMapper;
+using BookStore.BL.Interfaces;
 using BookStore.DL.Interfaces;
+using BookStore.DL.Repositories.InMemotyRepositories;
 using BookStore.Models.Models;
+using BookStore.Models.Requests;
+using BookStore.Models.Responses;
 
 namespace BookStore.BL.Services
 {
     public class BookService : IBookService
     {
         private readonly IBookRepository _bookRepository;
+        private readonly IMapper _mapper;
 
         public BookService(IBookRepository bookRepository)
         {
             _bookRepository = bookRepository;
         }
 
-        public Book AddBook(Book book)
+        public AddBookResponse AddBook(AddBookRequest addBookRequest)
         {
-            return _bookRepository.AddBook(book);
+            var book = _mapper.Map<Book>(addBookRequest);
+            var result = _bookRepository.AddBook(book);
+
+            return new AddBookResponse()
+            {
+                HttpStatusCode = HttpStatusCode.OK,
+                Book = result
+            };
         }
 
         public Book? DeleteBook(int bookId)
@@ -33,9 +46,23 @@ namespace BookStore.BL.Services
             return _bookRepository.GetByID(id);
         }
 
-        public Book UpdateBook(Book book)
+        public AddBookResponse UpdateBook(AddBookRequest addBookRequest, int id)
         {
-            return _bookRepository.UpdateBook(book);
+            var auth = _bookRepository.GetByID(id);
+            if (auth == null)
+                return new AddBookResponse()
+                {
+                    HttpStatusCode = HttpStatusCode.BadRequest,
+                    Message = "Book not exist"
+                };
+            var book = _mapper.Map<Book>(addBookRequest);
+            book.Id = id;
+            var result = _bookRepository.UpdateBook(book);
+            return new AddBookResponse()
+            {
+                HttpStatusCode = HttpStatusCode.OK,
+                Book = result
+            };
         }
     }
 }

@@ -1,6 +1,7 @@
-﻿using BookStore.BL.Interfaces;
-using BookStore.DL.Repositories.InMemotyRepositories;
+﻿using System.Net;
+using BookStore.BL.Interfaces;
 using BookStore.Models.Models;
+using BookStore.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Controllers
@@ -9,46 +10,69 @@ namespace BookStore.Controllers
     [Route("[controller]")]
     public class AuthorController : ControllerBase
     {
-        private readonly IAuthorService _authorRepository;
-        private static readonly List<Author> _authors = new List<Author>();
+        private readonly IAuthorService _authorService;
 
+        private readonly ILogger<AuthorController> _logger;
 
-        private readonly ILogger<Author> _logger;
-
-        public AuthorController(ILogger<Author> logger, IAuthorService authorRepository)
+        public AuthorController(ILogger<AuthorController> logger, IAuthorService authorRepository)
         {
             _logger = logger;
-            _authorRepository = authorRepository;
+            _authorService = authorRepository;
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("Get authors")]
-        public IEnumerable<Author> Get()
+        public IActionResult Get()
         {
-            return _authorRepository.GetAllAuthors();
+            return Ok(_authorService.GetAllAuthors());
         }
 
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("GetById")]
-        public Author GetById(int id)
+        public IActionResult GetAuthorById(int id)
         {
-            return _authorRepository.GetByID(id);
+            if (id <= 0) return BadRequest($"Parameter id: {id} mu be greater than zero !");
+            var result = _authorService.GetByID(id);
+            if (result == null) return NotFound(id);
+
+            return Ok(result);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public void Add([FromBody] Author model)
+        public IActionResult AddAuthor([FromBody] AddAuthorRequest authorRequest)
         {
-            _authorRepository.AddAuthor(model);
+            var result = _authorService.AddAuthor(authorRequest);
+
+            if (result.HttpStatusCode == HttpStatusCode.BadRequest)
+                return BadRequest(result);
+
+            return Ok(result);
         }
 
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPut]
-        public void Update(Author author)
+        public IActionResult Update(AddAuthorRequest author, int id)
         {
-            _authorRepository.UpdateAuthor(author);
+            if (_authorService.GetByID(id) ==null)
+            {
+                return NotFound($"Author with id: {id} not exsit");
+            }
+
+            return Ok(_authorService.UpdateAuthor(author, id));
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpDelete]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
-            _authorRepository.DeleteAuthor(id);
+            _authorService.DeleteAuthor(id);
+            return Ok();
         }
 
 
