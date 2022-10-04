@@ -14,15 +14,16 @@ namespace BookStore.BL.Services
         private readonly IBookRepository _bookRepository;
         private readonly IMapper _mapper;
 
-        public BookService(IBookRepository bookRepository)
+        public BookService(IBookRepository bookRepository, IMapper mapper)
         {
             _bookRepository = bookRepository;
+            _mapper = mapper;
         }
 
-        public AddBookResponse AddBook(AddBookRequest addBookRequest)
+        public async Task<AddBookResponse> AddBook(AddBookRequest addBookRequest)
         {
             var book = _mapper.Map<Book>(addBookRequest);
-            var result = _bookRepository.AddBook(book);
+            var result = await _bookRepository.AddBook(book);
 
             return new AddBookResponse()
             {
@@ -31,22 +32,22 @@ namespace BookStore.BL.Services
             };
         }
 
-        public Book? DeleteBook(int bookId)
+        public async Task<Book?> DeleteBook(int bookId)
         {
-            return _bookRepository.DeleteBook(bookId);
+            return await _bookRepository.DeleteBook(bookId);
         }
 
-        public IEnumerable<Book> GetAllBooks()
+        public async Task<IEnumerable<Book>> GetAllBooks()
         {
-            return _bookRepository.GetAllBooks();
+            return await _bookRepository.GetAllBooks();
         }
 
-        public Book? GetByID(int id)
+        public async Task<Book?> GetByID(int id)
         {
-            return _bookRepository.GetByID(id);
+            return await _bookRepository.GetByID(id);
         }
 
-        public AddBookResponse UpdateBook(AddBookRequest addBookRequest, int id)
+        public async Task<AddBookResponse> UpdateBook(AddBookRequest addBookRequest, int id)
         {
             var auth = _bookRepository.GetByID(id);
             if (auth == null)
@@ -61,7 +62,7 @@ namespace BookStore.BL.Services
             return new AddBookResponse()
             {
                 HttpStatusCode = HttpStatusCode.OK,
-                Book = result
+                Book = await result
             };
         }
     }
