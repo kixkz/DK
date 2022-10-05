@@ -1,17 +1,19 @@
 ﻿using BookStore.Models.Models;
+using BookStore.Models.Requests;
+using BookStore.Models.Responses;
 
 namespace BookStore.BL.Interfaces
 {
     public interface IPersonService
     {
-        Person AddUser(Person user);
+        Task<AddPersonResponse> AddUser(AddPersonRequest user);
 
-        Person? DeleteUser(int userId);
+        Task<Person?> DeleteUser(int userId);
 
-        IEnumerable<Person> GetAllUsers();
+        Task<IEnumerable<Person>> GetAllUsers();
 
-        Person? GetByID(int id);
+        Task<Person?> GetByID(int id);
 
-        Person UpdateUser(Person user);
+        Task<AddPersonResponse> UpdateUser(AddPersonRequest user, int id);
     }
 }

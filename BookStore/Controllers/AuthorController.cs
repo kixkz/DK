@@ -12,7 +12,6 @@ namespace BookStore.Controllers
     public class AuthorController : ControllerBase
     {
         private readonly IAuthorService _authorService;
-
         private readonly ILogger<AuthorController> _logger;
         private readonly IMapper _mapper;
 
@@ -81,12 +80,12 @@ namespace BookStore.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(AddAuthorRequest author, int id)
         {
-            if (_authorService.GetByID(id) ==null)
+            if (await _authorService.GetByID(id) ==null)
             {
                 return NotFound($"Author with id: {id} not exsit");
             }
 
-            return Ok(await _authorService.UpdateAuthor(author, id));
+            return Ok(_authorService.UpdateAuthor(author, id));
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]

@@ -10,7 +10,7 @@ namespace BookStore.Extensions
     {
         public static IServiceCollection RegisterRepositories(this IServiceCollection services)
         {
-            services.AddSingleton<IPersonRepository, UserInMemoryRepository>();
+            services.AddSingleton<IPersonRepository, PersonSqlRepository>();
             services.AddSingleton<IAuthorRepository, AuthorSqlRepository>();
             services.AddSingleton<IBookRepository, BookSqlRepository>();
 

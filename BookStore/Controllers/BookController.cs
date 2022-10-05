@@ -35,10 +35,10 @@ namespace BookStore.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             if (id <= 0) return BadRequest($"Parameter id: {id} mu be greater than zero !");
-            var result = _bookService.GetByID(id);
+            var result = await _bookService.GetByID(id);
             if (result == null) return NotFound(id);
 
-            return Ok(await result);
+            return Ok(result);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -58,12 +58,12 @@ namespace BookStore.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(AddBookRequest book, int id)
         {
-            if (_bookService.GetByID(id) == null)
+            if (await _bookService.GetByID(id) == null)
             {
                 return NotFound($"Book with id: {id} not exsit");
             }
 
-            return Ok(await _bookService.UpdateBook(book, id));
+            return Ok( _bookService.UpdateBook(book, id));
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
