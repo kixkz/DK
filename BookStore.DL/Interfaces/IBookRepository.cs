@@ -1,4 +1,5 @@
 ﻿using BookStore.Models.Models;
+using BookStore.Models.Requests;
 
 namespace BookStore.DL.Interfaces
 {
@@ -15,5 +16,7 @@ namespace BookStore.DL.Interfaces
         Task<Book> UpdateBook(Book book);
 
         Task<bool> IsAuthorWithBooks(int id);
+
+        Task<bool> IsBookDuplicated(AddBookRequest book);
     }
 }

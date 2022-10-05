@@ -2,22 +2,24 @@
 using AutoMapper;
 using BookStore.BL.Interfaces;
 using BookStore.DL.Interfaces;
-using BookStore.DL.Repositories.InMemotyRepositories;
 using BookStore.Models.Models;
 using BookStore.Models.Requests;
 using BookStore.Models.Responses;
+using Microsoft.Extensions.Logging;
 
 namespace BookStore.BL.Services
 {
     public class BookService : IBookService
     {
         private readonly IBookRepository _bookRepository;
+        private readonly IAuthorRepository _authorRepository;
         private readonly IMapper _mapper;
 
-        public BookService(IBookRepository bookRepository, IMapper mapper)
+        public BookService(IBookRepository bookRepository, IMapper mapper, IAuthorRepository authorRepository)
         {
             _bookRepository = bookRepository;
             _mapper = mapper;
+            _authorRepository = authorRepository;
         }
 
         public async Task<AddBookResponse> AddBook(AddBookRequest addBookRequest)
@@ -45,6 +47,11 @@ namespace BookStore.BL.Services
         public async Task<Book?> GetByID(int id)
         {
             return await _bookRepository.GetByID(id);
+        }
+
+        public async Task<bool> IsBookDuplicated(AddBookRequest book)
+        {
+            return await _bookRepository.IsBookDuplicated(book);
         }
 
         public async Task<AddBookResponse> UpdateBook(AddBookRequest addBookRequest, int id)
