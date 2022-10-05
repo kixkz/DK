@@ -4,7 +4,7 @@ namespace BookStore.HealthChecks
 {
     public class CustomHealthCheck : IHealthCheck
     {
-        public  async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
 			try
 			{
