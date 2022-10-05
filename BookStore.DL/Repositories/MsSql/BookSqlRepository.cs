@@ -1,6 +1,7 @@
 ﻿using System.Data.SqlClient;
 using BookStore.DL.Interfaces;
 using BookStore.Models.Models;
+using BookStore.Models.Requests;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -144,6 +145,30 @@ namespace BookStore.DL.Repositories.MsSql
             catch (Exception e)
             {
                 _logger.LogError($"Error in {nameof(IsAuthorWithBooks)}:{e.Message}", e);
+            }
+
+            return false;
+        }
+
+        public async Task<bool> IsBookDuplicated(AddBookRequest book)
+        {
+            try
+            {
+                await using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+                {
+                    await conn.OpenAsync();
+
+                    var result = await conn.QueryFirstOrDefaultAsync<Book>("SELECT * FROM Books WITH(NOLOCK) WHERE AuthorId = @authorid AND Title = @title", new { authorid = book.AuthorId, title = book.Title });
+
+                    if (result != null)
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Error in {nameof(IsBookDuplicated)}:{e.Message}", e);
             }
 
             return false;
