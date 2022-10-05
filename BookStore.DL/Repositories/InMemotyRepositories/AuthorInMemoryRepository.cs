@@ -1,15 +1,39 @@
 ﻿using BookStore.DL.Interfaces;
 using BookStore.Models.Models;
+using Microsoft.Extensions.Logging;
 
 namespace BookStore.DL.Repositories.InMemotyRepositories
 {
-    public class AuthorRepository : IAuthorRepository
+    public class AuthorInMemoryRepository 
     {
-        private static List<Author> _authors = new List<Author>();
+        private static List<Author> _authors = new List<Author>()
+        {
+            new Author()
+            {
+                Id = 1,
+                Name = "Toshko",
+                DateOfBirth = DateTime.Now,
+                NickName = "Tosheto"
+            },
+            new Author()
+            {
+                Id = 2,
+                Name = "Pesho",
+                DateOfBirth = DateTime.Now,
+                NickName = "Peshko"
+            },
+            new Author()
+            {
+                Id = 3,
+                Name = "Jeka",
+                DateOfBirth = DateTime.Now,
+                NickName = "Jekata"
+            }
+        };
 
+        private readonly ILogger<AuthorInMemoryRepository> _logger;
 
-
-        public AuthorRepository()
+        public AuthorInMemoryRepository()
         {
             _authors = new List<Author>();
         }
@@ -26,7 +50,7 @@ namespace BookStore.DL.Repositories.InMemotyRepositories
                 {
                     return null;
                 }
-                
+
             }
             catch (Exception e)
             {
@@ -74,6 +98,22 @@ namespace BookStore.DL.Repositories.InMemotyRepositories
         public Author? GetAuthorByName(string authorName)
         {
             return _authors.FirstOrDefault(x => x.Name.Equals(authorName));
+        }
+
+        public bool AddMultipleAuthors(IEnumerable<Author> authosCollection)
+        {
+            try
+            {
+                _authors.AddRange(authosCollection);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"Unable to add multiple authors with message {ex.Message}");
+                return false;
+            }
+
+
         }
     }
 }

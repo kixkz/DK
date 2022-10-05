@@ -1,6 +1,9 @@
+using System.Net;
+using AutoMapper;
 using BookStore.BL.Interfaces;
-using BookStore.DL.Interfaces;
+using BookStore.BL.Services;
 using BookStore.Models.Models;
+using BookStore.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Controllers
@@ -9,44 +12,60 @@ namespace BookStore.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IPersonService _userInMemoryRepository;
-
+        private readonly IPersonService _personService;
         private readonly ILogger<UserController> _logger;
+        private readonly IMapper _mapper;
 
-        public UserController(ILogger<UserController> logger, IPersonService userInMemoryRepository)
+        public UserController(ILogger<UserController> logger, IPersonService personRepository, IMapper mapper)
         {
             _logger = logger;
-            _userInMemoryRepository = userInMemoryRepository;
+            _personService = personRepository;
+            _mapper = mapper;
         }
 
-        [HttpGet(nameof(Get))]
-        public IEnumerable<Person> Get()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpGet("Get all persons")]
+        public async Task<IEnumerable<Person>> Get()
         {
-            return _userInMemoryRepository.GetAllUsers();
+            return await _personService.GetAllUsers();
         }
 
-        [HttpGet(nameof(GetById))]
-        public Person GetById(int id)
+        //[HttpGet(nameof(GetById))]
+        //public async Task<Person> GetById(int id)
+        //{
+        //    if (id <= 0) return BadRequest($"Parameter id: {id} must be greater than zero !");
+        //    var result = await _personService
+
+
+        //    //return _personService.GetByID(id);
+        //}
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost(nameof(Add))]
+        public async Task<IActionResult> Add([FromBody] AddPersonRequest personRequest)
         {
-            return _userInMemoryRepository.GetByID(id);
+            var result = await _personService.AddUser(personRequest);
+
+            if (result.HttpStatusCode == HttpStatusCode.BadRequest)
+                return BadRequest(result);
+
+            return Ok(result);
         }
 
-        [HttpPost]
-        public void Add([FromBody] Person model)
-        {
-            _userInMemoryRepository.AddUser(model);
-        }
-
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPut]
-        public void Update(Person user)
+        public async Task<IActionResult> Update(AddPersonRequest user, int id)
         {
-            _userInMemoryRepository.UpdateUser(user);
+            return Ok(await _personService.UpdateUser(user, id));
         }
 
         [HttpDelete]
         public void Delete(int id)
         {
-            _userInMemoryRepository.DeleteUser(id);
+            _personService.DeleteUser(id);
         }
 
        

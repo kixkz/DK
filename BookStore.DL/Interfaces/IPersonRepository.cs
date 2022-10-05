@@ -4,15 +4,15 @@ namespace BookStore.DL.Interfaces
 {
     public interface IPersonRepository
     {
-        Person AddUser(Person user);
+        public Task<Person> AddUser(Person user);
 
-        Person? DeleteUser(int userId);
+        public Task<Person?> DeleteUser(int userId);
 
-        IEnumerable<Person> GetAllUsers();
+        public Task<IEnumerable<Person>> GetAllUsers();
 
-        Person? GetByID(int id);
+        public Task<Person?> GetByID(int id);
 
-        Person UpdateUser(Person user);
+        public Task<Person> UpdateUser(Person user);
 
     }
 }

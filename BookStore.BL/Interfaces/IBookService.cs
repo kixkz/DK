@@ -6,14 +6,14 @@ namespace BookStore.BL.Interfaces
 {
     public interface IBookService
     {
-        AddBookResponse AddBook(AddBookRequest book);
+        Task<AddBookResponse> AddBook(AddBookRequest book);
 
-        Book? DeleteBook(int bookId);
+        Task<Book?> DeleteBook(int bookId);
 
-        IEnumerable<Book> GetAllBooks();
+        Task<IEnumerable<Book>> GetAllBooks();
 
-        Book? GetByID(int id);
+        Task<Book?> GetByID(int id);
 
-        AddBookResponse UpdateBook(AddBookRequest book, int id);
+        Task<AddBookResponse> UpdateBook(AddBookRequest book, int id);
     }
 }

@@ -1,15 +1,11 @@
-﻿namespace BookStore.Models.Models
+﻿namespace BookStore.Models.Requests
 {
-    public record Author
+    public class AddPersonRequest
     {
-        public int Id { get; set; }
-
         public string Name { get; set; }
 
         public int Age { get; set; }
 
         public DateTime DateOfBirth { get; set; }
-
-        public string NickName { get; set; }
     }
 }
