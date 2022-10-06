@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
 
-        public string Title { get; init; }
+        public string Title { get; set; }
 
-        public int AuthorId { get; init; }
+        public int AuthorId { get; set; }
 
         public int Quantity  { get; set; }
 

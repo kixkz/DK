@@ -78,21 +78,23 @@ namespace BookStore.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPut]
-        public async Task<IActionResult> Update(AddAuthorRequest author, int id)
+        public async Task<IActionResult> Update(UpdateAuthorRequest author)
         {
-            if (await _authorService.GetByID(id) ==null)
-            {
-                return NotFound($"Author with id: {id} not exsit");
-            }
-
-            return Ok(_authorService.UpdateAuthor(author, id));
+            return Ok(await _authorService.UpdateAuthor(author, author.Id));
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
+            if (await _authorService.GetByID(id) == null)
+            {
+                return BadRequest("Author not exist");
+            }
+
             var result = await _authorService.DeleteAuthor(id);
+
             return Ok(result);
         }
 

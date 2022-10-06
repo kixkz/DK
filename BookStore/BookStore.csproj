@@ -20,4 +20,8 @@
     <ProjectReference Include="..\BookStore.Models\BookStore.Models.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="BookStore.Test"/>
+	</ItemGroup>
+
 </Project>
