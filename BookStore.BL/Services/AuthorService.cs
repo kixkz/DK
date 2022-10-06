@@ -26,7 +26,7 @@ namespace BookStore.BL.Services
 
         public async Task<AddAuthorResponse> AddAuthor(AddAuthorRequest authorRequest)
         {
-            var auth = _authorRepository.GetAuthorByName(authorRequest.Name);
+            var auth = await _authorRepository.GetAuthorByName(authorRequest.Name);
 
             if (auth != null)
                 return new AddAuthorResponse()

@@ -14,6 +14,6 @@ namespace BookStore.BL.Interfaces
 
         Task<Book?> GetByID(int id);
 
-        Task<AddBookResponse> UpdateBook(AddBookRequest book, int id);
+        Task<AddBookResponse> UpdateBook(UpdateBookRequest book, int id);
     }
 }

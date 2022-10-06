@@ -14,12 +14,14 @@ namespace BookStore.BL.Services
         private readonly IBookRepository _bookRepository;
         private readonly IAuthorRepository _authorRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<BookService> _logger;
 
-        public BookService(IBookRepository bookRepository, IMapper mapper, IAuthorRepository authorRepository)
+        public BookService(IBookRepository bookRepository, IMapper mapper, IAuthorRepository authorRepository, ILogger<BookService> logger)
         {
             _bookRepository = bookRepository;
             _mapper = mapper;
             _authorRepository = authorRepository;
+            _logger = logger;
         }
 
         public async Task<AddBookResponse> AddBook(AddBookRequest addBookRequest)
@@ -54,9 +56,9 @@ namespace BookStore.BL.Services
             return await _bookRepository.IsBookDuplicated(book);
         }
 
-        public async Task<AddBookResponse> UpdateBook(AddBookRequest addBookRequest, int id)
+        public async Task<AddBookResponse> UpdateBook(UpdateBookRequest addBookRequest, int id)
         {
-            var auth = _bookRepository.GetByID(id);
+            var auth = await _bookRepository.GetByID(id);
             if (auth == null)
                 return new AddBookResponse()
                 {

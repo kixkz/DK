@@ -11,6 +11,7 @@ namespace BookStore.AutoMapper
             CreateMap<AddAuthorRequest, Author>();
             CreateMap<AddBookRequest, Book>();
             CreateMap<AddPersonRequest, Person>();
+            CreateMap<UpdateAuthorRequest, Author>();
         }
     }
 }
