@@ -47,7 +47,7 @@ namespace BookStore.Controllers
 
             var authorCollection = _mapper.Map<IEnumerable<Author>>(addMultipleAuthors.AuthorRequest);
 
-            var result = await _authorService.AddMultipleAuthors(authorCollection);
+            var result = await _mediator.Send(new AddMultipleAuthorsCommand(authorCollection));
 
             if (!result) return BadRequest(result);
 
