@@ -1,8 +1,10 @@
 ﻿using System.Net;
 using BookStore.BL.Interfaces;
 using BookStore.BL.Services;
+using BookStore.Models.MediatR.Commands;
 using BookStore.Models.Models;
 using BookStore.Models.Requests;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Controllers
@@ -12,20 +14,22 @@ namespace BookStore.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookService _bookService;
+        private readonly IMediator _mediator;
 
         private readonly ILogger<BookController> _logger;
 
-        public BookController(ILogger<BookController> logger, IBookService bookRepository)
+        public BookController(ILogger<BookController> logger, IBookService bookRepository, IMediator mediator)
         {
             _logger = logger;
             _bookService = bookRepository;
+            _mediator = mediator;
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("Get all books")]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _bookService.GetAllBooks());
+            return Ok(await _mediator.Send(new GetAllBooksCommand()));
         }
 
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -35,7 +39,9 @@ namespace BookStore.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             if (id <= 0) return BadRequest($"Parameter id: {id} mu be greater than zero !");
-            var result = await _bookService.GetByID(id);
+            
+            var result = await _mediator.Send(new GetBookByIdCommand(id));
+
             if (result == null) return NotFound(id);
 
             return Ok(result);
@@ -46,7 +52,7 @@ namespace BookStore.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBook([FromBody] AddBookRequest addBookRequest)
         {
-            var result = await _bookService.AddBook(addBookRequest);
+            var result = await _mediator.Send(new AddBookCommand(addBookRequest));
 
             if (result.HttpStatusCode == HttpStatusCode.BadRequest)
                 return BadRequest(result);
@@ -58,7 +64,9 @@ namespace BookStore.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(UpdateBookRequest book)
         {
-            return Ok(await _bookService.UpdateBook(book, book.Id));
+            var result = await _mediator.Send(new UpdateBookCommand(book));
+
+            return Ok(result);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -71,7 +79,7 @@ namespace BookStore.Controllers
                 return BadRequest("Book not exist");
             }
 
-            var result = await _bookService.DeleteBook(id);
+            var result = await _mediator.Send(new DeleteBookCommand(id));
 
             return Ok(result);
         }
