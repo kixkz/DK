@@ -32,6 +32,7 @@ namespace BookStore.Controllers
             return Ok(await _mediator.Send(new GetAllBooksCommand()));
         }
 
+
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]

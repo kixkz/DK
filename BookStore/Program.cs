@@ -1,12 +1,15 @@
 using System.Text;
 using BookStore.BL.CommandHandlers;
+using BookStore.DL.Repositories.MsSql;
 using BookStore.Extensions;
 using BookStore.HealthChecks;
 using BookStore.Middleware;
+using BookStore.Models.Models.Users;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -56,6 +59,18 @@ builder.Services.AddSwaggerGen(x =>
     });
 });
 
+builder.Services.AddAuthorization(option =>
+{
+    option.AddPolicy("View", policy =>
+    {
+        policy.RequireClaim("View");
+    });
+    option.AddPolicy("Admin", policy =>
+    {
+        policy.RequireClaim("Admin");
+    });
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -77,6 +92,10 @@ builder.Services.AddHealthChecks()
     .AddCheck<CustomHealthCheck>("Server OK");
 
 builder.Services.AddMediatR(typeof(GetAllBooksCommandHad).Assembly);
+
+builder.Services.AddIdentity<User, UserRole>()
+    .AddUserStore<UserInfoStore>()
+    .AddRoleStore<UserRoleStore>();
 
 var app = builder.Build();
 

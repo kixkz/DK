@@ -1,14 +1,11 @@
 ﻿using BookStore.BL.Interfaces;
-using BookStore.DL.Interfaces;
-using BookStore.Models.MediatR.Commands;
 using BookStore.Models.Models.Users;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [ApiController]
     [Route("[controller]")]
     public class EmployeeController : ControllerBase
@@ -28,7 +25,7 @@ namespace BookStore.Controllers
             return Ok(await _employeeService.AddEmployee(employee));
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet(nameof(Get))]
         public async Task<IActionResult> Get()
