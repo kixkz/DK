@@ -4,6 +4,7 @@ using BookStore.DL.Repositories.MsSql;
 using BookStore.Extensions;
 using BookStore.HealthChecks;
 using BookStore.Middleware;
+using BookStore.Models.Configurations;
 using BookStore.Models.Models.Users;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -23,6 +24,9 @@ var logger = new LoggerConfiguration()
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.AddSerilog(logger);
+
+builder.Services.Configure<MyJsonSettings>(
+    builder.Configuration.GetSection(nameof(MyJsonSettings)));
 
 // Add services to the container.
 builder.Services.RegisterRepositories()
@@ -85,6 +89,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
+
+builder.Services.Configure<MyKafkaProducerSettings>(builder.Configuration.GetSection(nameof(MyKafkaProducerSettings)));
+builder.Services.Configure<MyKafkaConsumerSettings>(builder.Configuration.GetSection(nameof(MyKafkaConsumerSettings)));
 
 builder.Services.AddHealthChecks()
     .AddCheck<SqlHealthCheck>("SQL Server")
