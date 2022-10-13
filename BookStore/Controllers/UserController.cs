@@ -1,10 +1,13 @@
 using System.Net;
 using AutoMapper;
 using BookStore.BL.Interfaces;
+using BookStore.BL.Kafka;
 using BookStore.BL.Services;
+using BookStore.Models.Configurations;
 using BookStore.Models.Models;
 using BookStore.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace BookStore.Controllers
 {
@@ -15,12 +18,18 @@ namespace BookStore.Controllers
         private readonly IPersonService _personService;
         private readonly ILogger<UserController> _logger;
         private readonly IMapper _mapper;
+        private readonly Producer<int, Person> _producer;
+        private readonly IList<Person> _persons = KafkaDataList<Person>.persons;
+        private readonly IOptionsMonitor<MyKafkaProducerSettings> _optionsMonitor;
 
-        public UserController(ILogger<UserController> logger, IPersonService personRepository, IMapper mapper)
+
+        public UserController(ILogger<UserController> logger, IPersonService personRepository, IMapper mapper, Producer<int, Person> producer, IOptionsMonitor<MyKafkaProducerSettings> optionsMonitor)
         {
             _logger = logger;
             _personService = personRepository;
             _mapper = mapper;
+            _producer = producer;
+            _optionsMonitor = optionsMonitor;
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -68,6 +77,21 @@ namespace BookStore.Controllers
             _personService.DeleteUser(id);
         }
 
-       
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPost("Produce")]
+        public async Task<IActionResult> ProducerPersons(int key, Person person)
+        {
+            await _producer.SendMessage(key, person);
+
+            return Ok();
+            
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpGet("Consume")]
+        public async Task<IEnumerable<Person>> GetPersons()
+        {
+            return _persons;
+        }
     }
 }

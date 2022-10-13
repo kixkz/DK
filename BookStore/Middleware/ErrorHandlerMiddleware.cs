@@ -42,7 +42,7 @@ namespace BookStore.Middleware
                         break;
                 }
 
-                var result = JsonConvert.SerializeObject(new { message = error.Message });
+                var result = JsonConvert.SerializeObject(new { message = error.Message, err = error.StackTrace });
                 _logger.LogError(result);
 
                 await response.WriteAsync(result);

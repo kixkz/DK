@@ -1,7 +1,10 @@
-﻿using BookStore.BL.Interfaces;
+﻿using BookStore.BL.BackgroundService;
+using BookStore.BL.Interfaces;
+using BookStore.BL.Kafka;
 using BookStore.BL.Services;
 using BookStore.DL.Interfaces;
 using BookStore.DL.Repositories.MsSql;
+using BookStore.Models.Models;
 
 namespace BookStore.Extensions
 {
@@ -25,6 +28,9 @@ namespace BookStore.Extensions
             services.AddSingleton<IBookService, BookService>();
             services.AddSingleton<IEmployeeService, EmployeeService>();
             services.AddTransient<IIdentityService, IdentityService>();
+            services.AddSingleton<Producer<int, Person>>();
+            services.AddSingleton<Consumer<int, Person>>();
+            services.AddHostedService<KafkaHostedService>();
 
             return services;
         }
