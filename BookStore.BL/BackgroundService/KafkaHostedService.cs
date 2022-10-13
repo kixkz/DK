@@ -22,7 +22,7 @@ namespace BookStore.BL.BackgroundService
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
     }
 }
