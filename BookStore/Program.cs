@@ -1,4 +1,5 @@
 using System.Text;
+using BookStore.BL.BackgroundService;
 using BookStore.BL.CommandHandlers;
 using BookStore.DL.Repositories.MsSql;
 using BookStore.Extensions;
@@ -91,7 +92,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.Configure<MyKafkaProducerSettings>(builder.Configuration.GetSection(nameof(MyKafkaProducerSettings)));
-builder.Services.Configure<MyKafkaConsumerSettings>(builder.Configuration.GetSection(nameof(MyKafkaConsumerSettings)));
+builder.Services.Configure<KafkaConsumerSettings>(builder.Configuration.GetSection(nameof(KafkaConsumerSettings)));
+
 
 builder.Services.AddHealthChecks()
     .AddCheck<SqlHealthCheck>("SQL Server")

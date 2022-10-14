@@ -7,16 +7,18 @@ namespace BookStore.BL.Kafka
 {
     public class Consumer<TKey, TValue>
     {
-        private readonly IOptionsMonitor<MyKafkaConsumerSettings> _kafkaSettings;
+        private readonly IOptionsMonitor<KafkaConsumerSettings> _kafkaSettings;
         private readonly IConsumer<TKey, TValue> _consumer;
+        public readonly List<TValue> _data;
 
-        public Consumer(IOptionsMonitor<MyKafkaConsumerSettings> kafkaSettings)
+        public Consumer(IOptionsMonitor<KafkaConsumerSettings> kafkaSettings)
         {
             _kafkaSettings = kafkaSettings;
 
             var config = new ConsumerConfig()
             {
                 BootstrapServers = kafkaSettings.CurrentValue.BootstrapServers,
+                AutoOffsetReset = AutoOffsetReset.Earliest,
                 GroupId = "MyGroup"
 
             };
@@ -25,7 +27,8 @@ namespace BookStore.BL.Kafka
                 .SetKeyDeserializer(new MsgPackDeserializer<TKey>())
                 .Build();
 
-            _consumer.Subscribe("PartTopic");
+            _consumer.Subscribe("Topic");
+            _data = new List<TValue>();
         }
 
         public Task Consume()
@@ -36,10 +39,10 @@ namespace BookStore.BL.Kafka
                 {
                     var cr = _consumer.Consume();
 
-                    KafkaDataList<TValue>.persons.Add(cr.Value);
+                    _data.Add(cr.Message.Value);
                 }
             });
-            
+
             return Task.CompletedTask;
         }
     }

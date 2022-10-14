@@ -1,11 +1,15 @@
 ﻿using System.Net;
 using BookStore.BL.Interfaces;
+using BookStore.BL.Kafka;
 using BookStore.BL.Services;
+using BookStore.Cash.Models;
 using BookStore.Models.MediatR.Commands;
 using BookStore.Models.Models;
 using BookStore.Models.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 
 namespace BookStore.Controllers
 {
@@ -15,14 +19,15 @@ namespace BookStore.Controllers
     {
         private readonly IBookService _bookService;
         private readonly IMediator _mediator;
-
+        private readonly Consumer<int, Book> _consumer;
         private readonly ILogger<BookController> _logger;
 
-        public BookController(ILogger<BookController> logger, IBookService bookRepository, IMediator mediator)
+        public BookController(ILogger<BookController> logger, IBookService bookRepository, IMediator mediator, Consumer<int, Book> consumer)
         {
             _logger = logger;
             _bookService = bookRepository;
             _mediator = mediator;
+            _consumer = consumer;
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -83,6 +88,13 @@ namespace BookStore.Controllers
             var result = await _mediator.Send(new DeleteBookCommand(id));
 
             return Ok(result);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpGet("Kafka")]
+        public async Task<IActionResult> GetCash()
+        {
+            return Ok(_consumer._data.Count());
         }
     }
 }

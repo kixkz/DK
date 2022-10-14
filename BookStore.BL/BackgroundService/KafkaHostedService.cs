@@ -6,9 +6,9 @@ namespace BookStore.BL.BackgroundService
 {
     public class KafkaHostedService : IHostedService
     {
-        private readonly Consumer<int, Person> _consumer;
+        private readonly Consumer<int, Book> _consumer;
 
-        public KafkaHostedService(Consumer<int, Person> consumer)
+        public KafkaHostedService(Consumer<int, Book> consumer)
         {
             _consumer = consumer;
         }
