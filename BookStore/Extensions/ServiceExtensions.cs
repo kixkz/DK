@@ -28,9 +28,10 @@ namespace BookStore.Extensions
             services.AddSingleton<IBookService, BookService>();
             services.AddSingleton<IEmployeeService, EmployeeService>();
             services.AddTransient<IIdentityService, IdentityService>();
-            services.AddSingleton<Producer<int, Person>>();
-            services.AddSingleton<Consumer<int, Person>>();
+            services.AddSingleton<Producer<int, Book>>();
             services.AddHostedService<KafkaHostedService>();
+            services.AddSingleton<Consumer<int, Book>>();
+            
 
             return services;
         }

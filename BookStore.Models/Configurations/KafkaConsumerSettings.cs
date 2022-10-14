@@ -1,6 +1,6 @@
 ﻿namespace BookStore.Models.Configurations
 {
-    public class MyKafkaConsumerSettings
+    public class KafkaConsumerSettings
     {
         public string BootstrapServers { get; set; }
 

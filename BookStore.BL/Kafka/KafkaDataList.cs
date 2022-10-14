@@ -4,6 +4,6 @@ namespace BookStore.BL.Kafka
 {
     public static class KafkaDataList<T>
     {
-        public static List<T> persons = new List<T>();
+        public static List<T> dataList = new List<T>();
     }
 }

@@ -19,7 +19,7 @@ namespace BookStore.Controllers
         private readonly ILogger<UserController> _logger;
         private readonly IMapper _mapper;
         private readonly Producer<int, Person> _producer;
-        private readonly IList<Person> _persons = KafkaDataList<Person>.persons;
+        private readonly IList<Person> _persons = KafkaDataList<Person>.dataList;
         private readonly IOptionsMonitor<MyKafkaProducerSettings> _optionsMonitor;
 
 
@@ -46,7 +46,7 @@ namespace BookStore.Controllers
         //    var result = await _personService
 
 
-        //    //return _personService.GetByID(id);
+        //    return _personService.GetByID(id);
         //}
 
         [ProducesResponseType(StatusCodes.Status200OK)]
