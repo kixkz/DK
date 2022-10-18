@@ -94,6 +94,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.Configure<MyKafkaProducerSettings>(builder.Configuration.GetSection(nameof(MyKafkaProducerSettings)));
 builder.Services.Configure<KafkaConsumerSettings>(builder.Configuration.GetSection(nameof(KafkaConsumerSettings)));
 
+builder.Services.Configure<MongoDbConfiguration>(builder.Configuration.GetSection(nameof(MongoDbConfiguration)));
+
 
 builder.Services.AddHealthChecks()
     .AddCheck<SqlHealthCheck>("SQL Server")

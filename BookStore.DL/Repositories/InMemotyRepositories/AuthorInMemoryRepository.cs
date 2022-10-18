@@ -112,8 +112,6 @@ namespace BookStore.DL.Repositories.InMemotyRepositories
                 _logger.LogWarning($"Unable to add multiple authors with message {ex.Message}");
                 return false;
             }
-
-
         }
     }
 }
